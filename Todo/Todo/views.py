@@ -7,3 +7,5 @@ def home(request):
         'tasks' : tasks,
     }
     return render(request, 'home.html', context)
+
+# chanchal
