@@ -1,0 +1,78 @@
+{% extends 'app.html' %}
+
+{% block content %}
+
+<div class="d-flex justify-content-center mt-5">
+  <div class="col-sm-6">
+    <h2 class="text-muted mb-4">Register</h2>
+
+    {% if form.non_field_errors %}
+      <div class="alert alert-danger">
+        <ul>
+          {{ form.non_field_errors.as_ul }}
+        </ul>
+      </div>
+    {% endif %}
+
+    <form method="POST" action="{% url 'register' %}">
+      {% csrf_token %}
+
+      <!-- Username Field -->
+      <div class="form-group mb-3">
+        <label for="{{ form.username.id_for_label }}">Username:</label>
+        <input
+          type="text"
+          id="{{ form.username.id_for_label }}"
+          name="{{ form.username.html_name }}"
+          class="form-control"
+          value="{{ form.username.value }}"
+          placeholder="Enter your username"
+          required
+        />
+        {% for error in form.username.errors %}
+          <small class="text-danger">{{ error }}</small>
+        {% endfor %}
+      </div>
+
+      <!-- Password Field -->
+      <div class="form-group mb-3">
+        <label for="{{ form.password1.id_for_label }}">Password:</label>
+        <input
+          type="password"
+          id="{{ form.password1.id_for_label }}"
+          name="{{ form.password1.html_name }}"
+          class="form-control"
+          placeholder="Enter your password"
+          required
+        />
+        {% for error in form.password1.errors %}
+          <small class="text-danger">{{ error }}</small>
+        {% endfor %}
+      </div>
+
+      <!-- Confirm Password Field -->
+      <div class="form-group mb-4">
+        <label for="{{ form.password2.id_for_label }}">Confirm Password:</label>
+        <input
+          type="password"
+          id="{{ form.password2.id_for_label }}"
+          name="{{ form.password2.html_name }}"
+          class="form-control"
+          placeholder="Confirm your password"
+          required
+        />
+        {% for error in form.password2.errors %}
+          <small class="text-danger">{{ error }}</small>
+        {% endfor %}
+      </div>
+
+      <!-- Submit Button -->
+      <button type="submit" class="btn btn-dark">Register</button>
+
+      <!-- Login Redirect -->
+      <a href="{% url 'login' %}" class="btn btn-secondary ml-2">Login</a>
+    </form>
+  </div>
+</div>
+
+{% endblock %}

@@ -22,7 +22,16 @@
 </head>
 <body>
     <div class="container">
-        <h3 class="pt-5 text-center">Django ToDo App</h3>
+        <div class="d-flex justify-content-between align-items-center pt-5">
+           <h3>Django ToDo App</h3>
+           {% if user.is_authenticated %}
+            <div>
+                <span class="me-3">Welcome, <b>{{ user.username }}</b></span>
+                <a href="{% url 'logout' %}" class="btn btn-outline-danger btn-sm">Logout</a>
+            </div>
+             {% endif %}
+        </div>
+
         <div class="row">
             <h4>My Day</h4>
             <p class="text-muted">{% now "jS F Y" %}</p>
@@ -32,36 +41,40 @@
 
                 <div class="card m-1">
                     <div class="card-body">
-                        {{ task.tasks }}
+                        {{ task.task }} 
                         <span style="position: relative; float: right;">
-                            <a class="btn btn-success"><i class="fa fa-check"></i> Mark as Done</a>
-                            <a class="btn btn-danger"><i class="fa fa-trash"></i></a>
-                            <a class="btn btn-primary"><i class="fa fa-pencil"></i></a>
+                            <a href="{% url 'mark_as_done' task.pk %}" class="btn btn-success"><i class="fa fa-check"></i> Mark as Done</a>
+                            <a href="{% url 'delete_task' task.pk %}" class="btn btn-danger"><i class="fa fa-trash"></i></a>
+                            <a href="{% url 'edit_task' task.pk %}" class="btn btn-primary"><i class="fa fa-pencil"></i></a>
                         </span>
                     </div>
                 </div>
-
                 {% endfor %}
-               
             </div>
             <div class="col-md-5 col-lg-5">
                 <h5>Completed Tasks</h5>
                 <!-- List of all the tasks that have completed -->
+                 {% for task in completed_task %}
                 <div class="card m-1">
-                    <div class="card-body">
-                        This is the completed task.
+                    <div class="card-body" >
+                        {{ task.task }} 
+                        <span style="position: relative; float: right;">
+                            <a href="{% url 'mark_as_UnDone' task.pk %}" class="btn btn-success"></i> Mark as UnDone</a>
+                            <a href="{% url 'delete_UnDone_task' task.pk %}" class="btn btn-danger"><i class="fa fa-trash"></i></a>
+                        </span>
                     </div>
                 </div>
+                {% endfor %}
             </div>
         </div>
         <div class="row">
-            <div class="col-md-6 col-lg-6 p-0" style="position: absolute; bottom: 50px;">
+            <div class="col-md-6 col-lg-6 p-0"  style="width: 500px;"  >
                 <!-- To Do Form -->
-                <form  >
-                    
+                <form  action="{% url 'addTask' %}" method="POST">
+                    {% csrf_token %}
                     <div class="form-group">
                         <span style="display: flex;">
-                            <input type="text" name="task" class="form-control" placeholder="Add a task">
+                            <input type="text" name="task" class="form-control" placeholder="Add a task" required>
                             <button type="submit" class="btn btn-primary" style="width: 200px;"><i class="fa fa-plus"></i> Add</button>
                         </span>
                     </div>
